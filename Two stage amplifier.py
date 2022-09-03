@@ -1,10 +1,13 @@
 import schemdraw
 import schemdraw.elements as element
 
-with schemdraw.Drawing() as d:
-    mini = d.unit*0.1
+ground = element.Ground().color('indigo')
 
-    d += element.Ground().color('indigo')
+with schemdraw.Drawing() as d:
+    mini = d.unit*0.1   # for minimizing element size
+
+    # Input source terminal    
+    d += ground
     d += element.Line().up(d.unit*0.7)
     d += (Vg:= element.SourceSin().up(mini).scale(1.3).color('blue').label('$V_g$'))
     d += element.Line().up(d.unit*0.8)
@@ -14,6 +17,7 @@ with schemdraw.Drawing() as d:
     d += (Cg:= element.Capacitor2().right(mini).color('cyan').scale(1.5))
     d += element.Line().right(d.unit*0.5).dot()
     
+    # 1st stage loop
     d += element.Line().up(d.unit*0.5)
     d += (R1:= element.Resistor().up(mini).color('violet').label("$R_1$",loc ='bot'))
     d += element.Line().up(d.unit*0.5)
@@ -42,6 +46,7 @@ with schemdraw.Drawing() as d:
     d += element.Line().right(d.unit*1.5)
     d.push()
 
+    #2nd stage loop 
     d += element.Line().down(d.unit*0.5).idot()
     d += (R12:= element.Resistor().down(mini).color('violet').label("$R_1$",loc ='bot'))
     d += (R12L:= element.Line().down(d.unit*1.5))
@@ -50,6 +55,7 @@ with schemdraw.Drawing() as d:
     d += element.Ground()
     d.pop()
     d += element.Line().right(d.unit*1.2)
+    d.push()
     d += element.Line().down(d.unit*0.5)
     d += (Rc2:= element.Resistor().down(mini).color('violet').label("$R_C$",loc ='bot'))
     d += (Rc2L:= element.Line().down(d.unit*0.5))
@@ -64,11 +70,14 @@ with schemdraw.Drawing() as d:
     d += (CE2:= element.Capacitor2().down(mini).color('cyan').scale(1.5))
     d += element.Line().down(d.unit*0.4)
     d += element.Ground().color('indigo')
-
     d += element.Line().right(d.unit*0.7).at(RcL.center).idot()
     d += element.Capacitor2().right(mini).color('cyan').scale(1.5)
     d += element.Line().tox(R12L.center).dot()
 
+    d.pop()
+    d += element.Line().idot().dot(open=True).scale(2).label('$+V_{CC}$',loc = 'right') # Vcc
+
+    # output terminal
     d += element.Line().right(d.unit*0.8).idot().at(Rc2L.center)
     d += (CL:= element.Capacitor2().right(mini).color('cyan').scale(1.5))
     d += element.Line().right(d.unit*0.8)
@@ -76,3 +85,4 @@ with schemdraw.Drawing() as d:
     d += (RL:= element.Resistor().down(mini).color('violet').label("$R_L$",loc ='bot'))
     d += element.Line().down(d.unit*0.85)
     d += element.Ground().color('indigo')
+    
